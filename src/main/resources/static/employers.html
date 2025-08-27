@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Employers — GetHired</title>
+<link rel="stylesheet" href="/assets/styles.css"/>
+</head>
+<body>
+<nav class="nav"><div class="inner">
+  <div class="brand">GET HIRED</div>
+  <div class="menu"><a href="/">Home</a><a href="/login.html">Login</a></div>
+</div></nav>
+
+<div class="container">
+  <h2>Post a Job</h2>
+  <div class="card" style="width:min(700px,95vw)">
+    <form id="postJob">
+      <div class="field"><label>Job title</label><input id="title" required /></div>
+      <div class="field"><label>Company</label><input id="company" required /></div>
+      <div class="field"><label>Location</label><input id="location" /></div>
+      <div class="field"><label>Description</label><textarea id="description" rows="5"></textarea></div>
+      <button class="primary" type="submit">Post Job</button>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('postJob').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  alert('Jobs API not present in backend yet. Create POST /jobs to enable this.');
+  // Example (future):
+  // await fetch('/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ title, company, location, description })});
+});
+</script>
+<script src="/assets/app.js"></script>
+</body></html>

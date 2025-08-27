@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>GetHired — Home</title>
+  <link rel="stylesheet" href="/assets/styles.css"/>
+</head>
+<body>
+<nav class="nav"><div class="inner">
+  <div class="brand">GET HIRED</div>
+  <div class="menu">
+    <a href="/">Home</a>
+    <a href="/jobs.html">Jobs</a>
+    <a href="/employers.html">Employers</a>
+    <a href="/login.html">Login</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <div class="box">
+    <h1>Find Your Dream Job Today</h1>
+    <p>Thousands of companies are hiring right now.</p>
+    <form id="searchForm" class="search">
+      <input id="q" placeholder="Job Title / Skills" required />
+      <input id="loc" placeholder="Location" />
+      <button>Search</button>
+    </form>
+  </div>
+</header>
+
+<section class="container">
+  <div class="grid cols-3">
+    <div class="card"><strong>Students</strong><p>Create profile & apply.</p></div>
+    <div class="card"><strong>Recruiters</strong><p>Post jobs & manage candidates.</p></div>
+    <div class="card"><strong>Secure</strong><p>Powered by Spring Boot + MySQL.</p></div>
+  </div>
+</section>
+
+<footer>© <span id="year"></span> GetHired</footer>
+<script src="/assets/app.js"></script>
+<script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+</body>
+</html>

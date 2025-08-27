@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Signup — GetHired</title>
+<link rel="stylesheet" href="/assets/styles.css"/>
+</head>
+<body>
+<nav class="nav"><div class="inner">
+  <div class="brand">GET HIRED</div>
+  <div class="menu"><a href="/">Home</a><a href="/login.html">Login</a></div>
+</div></nav>
+
+<div class="container">
+  <div class="card" style="width:min(900px,95vw);margin:auto;margin-top:40px;">
+    <h2>Create Account</h2>
+    <div style="display:flex;gap:12px;margin:10px 0">
+      <label><input type="radio" name="role" value="employee" checked/> Employee</label>
+      <label><input type="radio" name="role" value="recruiter"/> Recruiter</label>
+    </div>
+
+    <form id="signupForm" class="grid cols-2">
+      <div class="field"><label>Name</label><input id="name" required/></div>
+      <div class="field"><label>Email</label><input id="email" type="email" required/></div>
+      <div class="field"><label>Password</label><input id="password" type="password" required/></div>
+
+      <!-- Employee fields -->
+      <div class="field emp"><label>Degree</label><input id="degree"/></div>
+      <div class="field emp"><label>Passout Year</label><input id="passout_year" type="number" min="1900" max="2100"/></div>
+      <div class="field emp" style="grid-column:1/-1"><label>Skills</label><input id="skills" placeholder="Java, HTML, CSS, JS"/></div>
+
+      <!-- Recruiter fields -->
+      <div class="field rec" style="display:none"><label>Company</label><input id="company"/></div>
+      <div class="field rec" style="display:none"><label>Company Email</label><input id="company_email" type="email"/></div>
+
+      <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:6px">
+        <button class="primary">Create Account</button>
+        <a class="ghost" href="/login.html" style="display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid #d1d5db">Back to Login</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Toggle employee vs recruiter extra fields on this page
+  const radio = document.querySelectorAll('input[name=role]');
+  const show = role => {
+    document.querySelectorAll('.emp').forEach(e=> e.style.display = (role==='employee')?'block':'none');
+    document.querySelectorAll('.rec').forEach(e=> e.style.display = (role==='recruiter')?'block':'none');
+  };
+  radio.forEach(r=> r.addEventListener('change', e=> show(e.target.value)));
+  show('employee');
+</script>
+<script src="/assets/app.js"></script>
+</body></html>
