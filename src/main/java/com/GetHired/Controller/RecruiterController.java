@@ -3,10 +3,15 @@ package com.GetHired.Controller;
 import com.GetHired.Entities.Recruiter;
 import com.GetHired.Service.RecruiterServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/recruiter")
@@ -18,6 +23,37 @@ public class RecruiterController {
     @PostMapping("/add")
     public void add(@RequestBody Recruiter recruiter){
         recruiterServices.addRecruiter(recruiter);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
+        try {
+            String email = loginData.get("email");
+            String password = loginData.get("password");
+
+            if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("error", "Email and password cannot be empty."));
+            }
+
+            Optional<Recruiter> recruiter = recruiterServices.findByEmail(email);
+
+            if (recruiter.isPresent() && recruiter.get().getPassword().equals(password)) {
+                Map<String, Object> response = Map.of(
+                        "recruiterId", recruiter.get().getId(),
+                        "name", recruiter.get().getName(),
+                        "companyName", recruiter.get().getCompany_name()
+                );
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Invalid email or password."));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "An unexpected error occurred."));
+        }
     }
 
 

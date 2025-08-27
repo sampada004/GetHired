@@ -5,6 +5,8 @@ import com.GetHired.Entities.Recruiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class RecruiterServices {
     @Autowired
@@ -18,6 +20,9 @@ public class RecruiterServices {
         return recruiterDAO.findById(id);
     }
 
+    public Optional<Recruiter> findByEmail(String email) {
+        return recruiterDAO.findRecruiterByEmail(email);
+    }
 
 
 
