@@ -3,7 +3,7 @@ package com.GetHired.Service;
 import com.GetHired.DAO.EmployeeDAO;
 import com.GetHired.DAO.JobDAO;
 import com.GetHired.Entities.Employee;
-import com.GetHired.Entities.Job;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

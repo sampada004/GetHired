@@ -1,7 +1,7 @@
 package com.GetHired.Controller;
 
 import com.GetHired.Entities.Employee;
-import com.GetHired.Entities.Job;
+
 import com.GetHired.Service.EmployeeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
