@@ -108,3 +108,4 @@ if(signupForm){
   el.innerHTML = `<span class="badge">${u.role}</span> ${u.name || u.email}`;
   qs('#logout')?.addEventListener('click', ()=>{ auth.clear(); location.href='/login.html'; });
 })();
+

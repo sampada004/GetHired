@@ -3,11 +3,13 @@
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Login — GetHired</title>
 <link rel="stylesheet" href="/assets/styles.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <nav class="nav"><div class="inner">
   <div class="brand">GET HIRED</div>
-  <div class="menu"><a href="/">Home</a><a href="/signup.html">Signup</a><a href="/jobs.html">Jobs</a></div>
+  <div class="menu"><a href="/">Home</a>
+ </div>
 </div></nav>
 
 <div class="container">
@@ -19,13 +21,36 @@
     </div>
     <form id="loginForm">
       <div class="field"><label>Email</label><input id="email" type="email" required/></div>
-      <div class="field"><label>Password</label><input id="password" type="password" required/></div>
+      <div class="field"><label>Password</label><input id="password" type="password" required/>
+        <i class="fa-solid fa-eye" id="togglePassword"></i>
+        
+      
+
+
+      </div>
+     
       <button class="primary" type="submit">Login</button>
-      <div id="loginError" class="notice">Invalid email or password</div>
+      
     </form>
     <p style="margin-top:10px">New user? <a href="/signup.html" style="color:#2563eb">Create an account</a></p>
   </div>
 </div>
+ 
+<script>
+  const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#password");
+
+    togglePassword.addEventListener("click", function () {
+      // toggle the type attribute
+      const type = password.getAttribute("type") === "password" ? "text" : "password";
+      password.setAttribute("type", type);
+
+      // toggle the eye / eye-slash icon
+      this.classList.toggle("fa-eye");
+      this.classList.toggle("fa-eye-slash");
+    });
+</script>
+  
 
 <script src="/assets/app.js"></script>
 </body></html>
