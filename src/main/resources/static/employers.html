@@ -23,13 +23,63 @@
   </div>
 </div>
 
+  
+<div id="myJobs">
+
+<h2>My Posted Jobs</h2>
+
+  </div>
+
 <script>
+
+  
 document.getElementById('postJob').addEventListener('submit', async (e)=>{
   e.preventDefault();
   alert('Jobs API not present in backend yet. Create POST /jobs to enable this.');
   // Example (future):
   // await fetch('/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ title, company, location, description })});
+
+const recruiter = auth.get();
+const jobsDiv = document.querySelector('#myJobs');
+
+if(recruiter && jobsDiv){
+  API.getJobsByRecruiter(recruiter.id).then(jobs=>{
+    if(!jobs.length){
+      jobsDiv.innerHTML = '<p>No jobs posted yet</p>';
+      return;
+    }
+
+    jobsDiv.innerHTML = jobs.map(j=>
+      `<div class="jobCard">
+         <h3>${j.title}</h3>
+         <p>${j.description}</p>
+         <button onclick="showApplicants(${j.id})">View Applicants</button>
+         <div id="applicants-${j.id}" class="applicantsBox"></div>
+       </div>`
+    ).join('');
+  });
+}
+
+async function showApplicants(jobId){
+  const box = document.querySelector('#applicants-'+jobId);
+  const apps = await API.getApplicationsByJob(jobId);
+
+  if(!apps.length){
+    box.innerHTML = '<p>No applicants yet</p>';
+    return;
+  }
+
+  box.innerHTML = apps.map(a=>
+    `<div class="applicantCard">
+       <p>Name: ${a.employee.name}</p>
+       <p>Email: ${a.employee.email}</p>
+       <p>Status: ${a.status || 'Pending'}</p>
+     </div>`
+  ).join('');
+}
+
 });
+
 </script>
 <script src="/assets/app.js"></script>
 </body></html>

@@ -109,3 +109,43 @@ if(signupForm){
   qs('#logout')?.addEventListener('click', ()=>{ auth.clear(); location.href='/login.html'; });
 })();
 
+
+
+// ----- JOB APIs -----
+API.getJobs = async function(){
+  const res = await fetch('/jobs');
+  return res.json();
+};
+
+API.addJob = async function(payload){
+  return fetch('/jobs/add', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+};
+
+API.getJobsByRecruiter = async function(rid){
+  const res = await fetch(`/jobs/recruiter/${rid}`);
+  return res.json();
+};
+
+// ----- APPLICATION APIs -----
+API.applyJob = async function(payload){
+  return fetch('/application/add', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+};
+
+API.getApplicationsByEmployee = async function(eid){
+  const res = await fetch(`/application/employee/${eid}`);
+  return res.json();
+};
+
+API.getApplicationsByJob = async function(jid){
+  const res = await fetch(`/application/job/${jid}`);
+  return res.json();
+};
+

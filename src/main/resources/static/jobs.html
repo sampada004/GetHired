@@ -33,5 +33,35 @@
   </div>
 </div>
 
+<script>
+
+  const jobsContainer = document.querySelector('#jobsContainer');
+
+if(jobsContainer){
+  API.getJobs().then(jobs=>{
+    jobsContainer.innerHTML = jobs.map(j=>
+      `<div class="jobCard">
+         <h3>${j.title}</h3>
+         <p>${j.description}</p>
+         <p>Location: ${j.location}</p>
+         <p>Salary: ${j.salary}</p>
+         <button onclick="applyForJob(${j.id})">Apply</button>
+       </div>`
+    ).join('');
+  });
+}
+
+async function applyForJob(jobId){
+  const user = auth.get();  // yeh tumhare existing login system ka user fetch karega
+  if(!user){ alert('Please login first'); return; }
+
+  const payload = { employeeId:user.id, jobId:jobId };
+  const res = await API.applyJob(payload);
+  if(res.ok) alert('Application sent!');
+  else alert('Failed to apply');
+}
+
+</script>
+
 <script src="/assets/app.js"></script>
 </body></html>
