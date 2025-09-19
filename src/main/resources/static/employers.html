@@ -1,85 +1,138 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Employers — GetHired</title>
-<link rel="stylesheet" href="/assets/styles.css"/>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Employers — GetHired</title>
+  <link rel="stylesheet" href="/styles.css"/>
 </head>
 <body>
-<nav class="nav"><div class="inner">
-  <div class="brand">GET HIRED</div>
-  <div class="menu"><a href="/">Home</a><a href="/login.html">Login</a></div>
-</div></nav>
+<nav class="nav">
+  <div class="inner">
+    <div class="brand">GET HIRED</div>
+    <div class="menu">
+      <a href="/">Home</a>
+      <a href="/login.html">Login</a>
+    </div>
+  </div>
+</nav>
 
 <div class="container">
   <h2>Post a Job</h2>
   <div class="card" style="width:min(700px,95vw)">
     <form id="postJob">
-      <div class="field"><label>Job title</label><input id="title" required /></div>
-      <div class="field"><label>Company Name</label><input id="company" required /></div>
-      <div class="field"><label>Location</label><input id="location" required /></div>
-      <div class="field"><label>Description</label><textarea id="description" rows="5"></textarea></div>
+      <div class="field"><label for="title">Job title</label><input id="title" required /></div>
+      <div class="field"><label for="company">Company Name</label><input id="company" required /></div>
+      <div class="field"><label for="location">Location</label><input id="location" required /></div>
+      <div class="field"><label for="description">Description</label><textarea id="description" rows="5"></textarea></div>
       <button class="primary" type="submit">Post Job</button>
     </form>
   </div>
 </div>
 
-  
 <div id="myJobs">
+  <h2>My Posted Jobs</h2>
+  <!-- Jobs will be loaded here by JavaScript -->
+</div>
 
-<h2>My Posted Jobs</h2>
-
-  </div>
-
+<script src="/app.js"></script>
 <script>
+  // This function fetches and displays the jobs posted by the logged-in recruiter.
+  // It's called on page load and after a successful job post.
+  async function fetchAndDisplayJobs() {
+      const recruiter = auth.get();
+      const jobsDiv = document.querySelector('#myJobs');
 
-  
-document.getElementById('postJob').addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  alert('Jobs API not present in backend yet. Create POST /jobs to enable this.');
-  // Example (future):
-  // await fetch('/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ title, company, location, description })});
+      if (!recruiter || !jobsDiv) {
+          // Check if recruiter is logged in or if the jobsDiv element exists
+          jobsDiv.innerHTML = '<p>Please log in to view your posted jobs.</p>';
+          return;
+      }
 
-const recruiter = auth.get();
-const jobsDiv = document.querySelector('#myJobs');
+      try {
+          const jobs = await API.getJobsByRecruiter(recruiter.id);
 
-if(recruiter && jobsDiv){
-  API.getJobsByRecruiter(recruiter.id).then(jobs=>{
-    if(!jobs.length){
-      jobsDiv.innerHTML = '<p>No jobs posted yet</p>';
-      return;
-    }
+          if (!jobs.length) {
+              jobsDiv.innerHTML = '<p>No jobs posted yet.</p>';
+              return;
+          }
 
-    jobsDiv.innerHTML = jobs.map(j=>
-      `<div class="jobCard">
-         <h3>${j.title}</h3>
-         <p>${j.description}</p>
-         <button onclick="showApplicants(${j.id})">View Applicants</button>
-         <div id="applicants-${j.id}" class="applicantsBox"></div>
-       </div>`
-    ).join('');
-  });
-}
-
-async function showApplicants(jobId){
-  const box = document.querySelector('#applicants-'+jobId);
-  const apps = await API.getApplicationsByJob(jobId);
-
-  if(!apps.length){
-    box.innerHTML = '<p>No applicants yet</p>';
-    return;
+          jobsDiv.innerHTML = jobs.map(j =>
+              `<div class="jobCard">
+                 <h3>${j.title}</h3>
+                 <p>${j.description}</p>
+                 <button onclick="showApplicants(${j.id})">View Applicants</button>
+                 <div id="applicants-${j.id}" class="applicantsBox"></div>
+               </div>`
+          ).join('');
+      } catch (error) {
+          console.error('Error fetching jobs:', error);
+          jobsDiv.innerHTML = '<p>Failed to load your jobs. Please check the console for errors.</p>';
+      }
   }
 
-  box.innerHTML = apps.map(a=>
-    `<div class="applicantCard">
-       <p>Name: ${a.employee.name}</p>
-       <p>Email: ${a.employee.email}</p>
-       <p>Status: ${a.status || 'Pending'}</p>
-     </div>`
-  ).join('');
-}
+  // This function shows the applicants for a specific job.
+  async function showApplicants(jobId) {
+      const box = document.querySelector('#applicants-' + jobId);
 
-});
+      try {
+          // This API function needs to be defined in app.js
+          const apps = await API.getApplicationsByJob(jobId);
 
+          if (!apps.length) {
+              box.innerHTML = '<p>No applicants yet</p>';
+              return;
+          }
+
+          box.innerHTML = apps.map(a =>
+              `<div class="applicantCard">
+                 <p>Name: ${a.employee.name}</p>
+                 <p>Email: ${a.employee.email}</p>
+                 <p>Status: ${a.status || 'Pending'}</p>
+               </div>`
+          ).join('');
+      } catch (error) {
+          console.error('Error fetching applicants:', error);
+          box.innerHTML = '<p>Failed to load applicants. Check your API and network connection.</p>';
+      }
+  }
+
+  // This is the main event listener for the job posting form.
+  document.getElementById('postJob').addEventListener('submit', async (e) => {
+      // Prevent the browser from reloading the page
+      e.preventDefault();
+
+      // Get the values from the form inputs
+      const title = document.getElementById('title').value;
+      const company = document.getElementById('company').value;
+      const location = document.getElementById('location').value;
+      const description = document.getElementById('description').value;
+
+      // Create the payload to send to the backend
+      const payload = { title, company, location, description };
+
+      try {
+          // Use your API.addJob function from app.js
+          const res = await API.addJob(payload);
+
+          if (res.ok) {
+              // If the request was successful
+              alert('Job posted successfully!');
+              document.getElementById('postJob').reset(); // Clear the form
+              fetchAndDisplayJobs(); // Refresh the list of posted jobs
+          } else {
+              // If the backend returns an error (e.g., 404, 500, etc.)
+              alert('Failed to post job. Please check your backend API.');
+          }
+      } catch (error) {
+          // Catch any network errors (e.g., no internet, CORS issues)
+          console.error('Error:', error);
+          alert('An error occurred. Check the console for more details.');
+      }
+  });
+
+  // Call this function when the page first loads to show existing jobs
+  fetchAndDisplayJobs();
 </script>
-<script src="/assets/app.js"></script>
-</body></html>
+</body>
+</html>

@@ -1,67 +1,100 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Jobs — GetHired</title>
-<link rel="stylesheet" href="/assets/styles.css"/>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Jobs — GetHired</title>
+  <link rel="stylesheet" href="/styles.css"/>
 </head>
 <body>
-<nav class="nav"><div class="inner">
-  <div class="brand">GET HIRED</div>
-  <div class="menu"><a href="/">Home</a>
-<div class="menu">
-     <a href="javascript:void(0)" id="logout">Logout</a>
-
+<nav class="nav">
+  <div class="inner">
+    <div class="brand">GET HIRED</div>
+    <div class="menu">
+      <a href="/">Home</a>
+      <div class="menu">
+        <a href="javascript:void(0)" id="logout">Logout</a>
+      </div>
+      <a href="employers.html">Post a job</a>
+    </div>
   </div>
-
-  <a href="employers.html">Post a job</a>
-  </div>
-</div></nav>
+</nav>
 
 <div class="container">
   <h2>Open Roles</h2>
-  <div class="grid cols-2" id="list">
+  <!-- The ID is changed to jobsContainer to match the JavaScript -->
+  <div class="grid cols-2" id="jobsContainer">
+    <!-- The static cards will be replaced by the fetched jobs -->
     <div class="card">
       <strong>Java Intern</strong> • Acme Corp — Indore
       <p style="margin:.4rem 0;color:#475569">Work with Java/Spring team on backend features.</p>
-      <button class="primary" onclick="alert('Add jobs API to enable apply')">Apply</button>
-    </div>
-    <div class="card">
-      <strong>Frontend Trainee</strong> • Beta Ltd — Bhopal
-      <p style="margin:.4rem 0;color:#475569">Build responsive UIs with HTML/CSS/JS.</p>
-      <button class="primary" onclick="alert('Add jobs API to enable apply')">Apply</button>
+      <button class="primary" onclick="alert('Please define the API.applyJob function to enable this.')">Apply</button>
     </div>
   </div>
 </div>
 
+<script src="/app.js"></script>
 <script>
+  // This function will fetch jobs and display them on the page.
+  async function fetchAndDisplayJobs() {
+      // Find the correct container for the jobs.
+      const jobsContainer = document.querySelector('#jobsContainer');
 
-  const jobsContainer = document.querySelector('#jobsContainer');
+      if (!jobsContainer) {
+          console.error("Jobs container element not found!");
+          return;
+      }
 
-if(jobsContainer){
-  API.getJobs().then(jobs=>{
-    jobsContainer.innerHTML = jobs.map(j=>
-      `<div class="jobCard">
-         <h3>${j.title}</h3>
-         <p>${j.description}</p>
-         <p>Location: ${j.location}</p>
-         <p>Salary: ${j.salary}</p>
-         <button onclick="applyForJob(${j.id})">Apply</button>
-       </div>`
-    ).join('');
-  });
-}
+      try {
+          // Fetch all jobs using the API.getJobs function from app.js
+          const jobs = await API.getJobs();
 
-async function applyForJob(jobId){
-  const user = auth.get();  // yeh tumhare existing login system ka user fetch karega
-  if(!user){ alert('Please login first'); return; }
+          if (jobs.length === 0) {
+              jobsContainer.innerHTML = '<p>No open roles are available at the moment.</p>';
+              return;
+          }
 
-  const payload = { employeeId:user.id, jobId:jobId };
-  const res = await API.applyJob(payload);
-  if(res.ok) alert('Application sent!');
-  else alert('Failed to apply');
-}
+          // Generate HTML for each job and insert it into the container.
+          jobsContainer.innerHTML = jobs.map(j =>
+              `<div class="card">
+                 <strong>${j.title}</strong> • ${j.company} — ${j.location}
+                 <p style="margin:.4rem 0;color:#475569">${j.description}</p>
+                 <button class="primary" onclick="applyForJob(${j.id})">Apply</button>
+               </div>`
+          ).join('');
 
+      } catch (error) {
+          console.error('Error fetching jobs:', error);
+          jobsContainer.innerHTML = '<p>Failed to load jobs. Please check your network and API endpoint.</p>';
+      }
+  }
+
+  // This function handles the job application process.
+  async function applyForJob(jobId) {
+    const user = auth.get();
+    if (!user) {
+        alert('Please login first');
+        return;
+    }
+
+    const payload = { employeeId: user.id, jobId: jobId };
+
+    try {
+        // Use the API.applyJob function from app.js to send the application.
+        const res = await API.applyJob(payload);
+        if (res.ok) {
+            alert('Application sent successfully!');
+        } else {
+            alert('Failed to send application. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error applying for job:', error);
+        alert('An error occurred while applying. Please try again later.');
+    }
+  }
+
+  // Call the function when the page loads to display the jobs.
+  fetchAndDisplayJobs();
 </script>
-
-<script src="/assets/app.js"></script>
-</body></html>
+</body>
+</html>

@@ -113,12 +113,12 @@ if(signupForm){
 
 // ----- JOB APIs -----
 API.getJobs = async function(){
-  const res = await fetch('/jobs');
+  const res = await fetch('/job/all');
   return res.json();
 };
 
 API.addJob = async function(payload){
-  return fetch('/jobs/add', {
+  return fetch('/job/post', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify(payload)
