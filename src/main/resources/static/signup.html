@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Signup — GetHired</title>
-<link rel="stylesheet" href="/styles.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Signup — GetHired</title>
+  <link rel="stylesheet" href="/styles.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <nav class="nav"><div class="inner">
@@ -23,7 +24,7 @@
       <div class="field"><label>Name</label><input id="name" name="name" required/></div>
       <div class="field"><label>Email</label><input id="email" name="email" type="email" required/></div>
       <div class="field"><label>Password</label><input id="password" name="password" type="password" required/>
-      <i class="fa-solid fa-eye" id="togglePassword"></i>
+        <i class="fa-solid fa-eye" id="togglePassword"></i>
       </div>
 
       <!-- Employee fields -->
@@ -33,7 +34,6 @@
 
       <!-- Recruiter fields -->
       <div class="field rec" style="display:none"><label>Company</label><input id="company"/></div>
-     
 
       <div style="grid-column:1/-1;display:flex;gap:10px;margin-top:6px">
         <button class="primary">Create Account</button>
@@ -43,29 +43,70 @@
   </div>
 </div>
 
+<script src="/app.js"></script>
 <script>
-  // Toggle employee vs recruiter extra fields on this page
+  // Toggle employee vs recruiter extra fields
   const radio = document.querySelectorAll('input[name=role]');
   const show = role => {
-    document.querySelectorAll('.emp').forEach(e=> e.style.display = (role==='employee')?'block':'none');
-    document.querySelectorAll('.rec').forEach(e=> e.style.display = (role==='recruiter')?'block':'none');
+      document.querySelectorAll('.emp').forEach(e => e.style.display = (role === 'employee') ? 'block' : 'none');
+      document.querySelectorAll('.rec').forEach(e => e.style.display = (role === 'recruiter') ? 'block' : 'none');
   };
-  radio.forEach(r=> r.addEventListener('change', e=> show(e.target.value)));
+  radio.forEach(r => r.addEventListener('change', e => show(e.target.value)));
   show('employee');
 
-   const togglePassword = document.querySelector("#togglePassword");
-    const password = document.querySelector("#password");
+  // Toggle password visibility
+  const togglePassword = document.querySelector("#togglePassword");
+  const password = document.querySelector("#password");
 
-    togglePassword.addEventListener("click", function () {
-      // toggle the type attribute
+  togglePassword.addEventListener("click", function () {
       const type = password.getAttribute("type") === "password" ? "text" : "password";
       password.setAttribute("type", type);
-
-      // toggle the eye / eye-slash icon
       this.classList.toggle("fa-eye");
       this.classList.toggle("fa-eye-slash");
-    });
-  
+  });
+
+  // Form submission handler for creating a new account
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Get the common form values
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+
+      let payload = { name, email, password, role };
+      let apiCall;
+
+      // Add role-specific fields to the payload and select the correct API call
+      if (role === 'employee') {
+          payload.degree = document.getElementById('degree').value;
+          payload.passout_year = document.getElementById('passout_year').value;
+          payload.skills = document.getElementById('skills').value;
+          // Assuming API.signup is for employees
+          apiCall = API.signup(payload);
+      } else if (role === 'recruiter') {
+          // Corrected: Map the 'company' input to the 'company_name' payload key
+          payload.company_name = document.getElementById('company').value;
+          // Use the specific API for recruiters
+          apiCall = API.recruiterSignup(payload);
+      }
+
+      try {
+          const res = await apiCall;
+
+          if (res.ok) {
+              alert('Account created successfully!');
+              window.location.href = '/login.html'; // Redirect to login page
+          } else {
+              const errorData = await res.json();
+              alert(`Failed to create account: ${errorData.message}`);
+          }
+      } catch (error) {
+          console.error('Error during signup:', error);
+          alert('An unexpected error occurred. Please try again later.');
+      }
+  });
 </script>
-<script src="/app.js"></script>
-</body></html>
+</body>
+</html>

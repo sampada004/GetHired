@@ -7,27 +7,26 @@
 </head>
 <body>
 <nav class="nav"><div class="inner">
-  <div class="brand">GET HIRED</div>
+  <div class="brand">
+
+    GET HIRED
+  </div>
   <div class="menu">
-
-
     <a href="/">Home</a>
-     <a href="/signup.html">Register</a>
+    <a href="/signup.html">Register</a>
     <a href="/jobs.html">All Jobs</a>
     <a href="/login.html">Login</a>
     <a href="/dashboard.html"> My dashboard</a>
-
-<a href="employers.html">Post a job</a>
- 
-  <a href="javascript:void(0)" id="logout">Logout</a> 
+    <a href="employers.html">Post a job</a>
+    <a href="javascript:void(0)" id="logout">Logout</a>
   </div>
 </div></nav>
 
-<header class="hero">
+<header class="hero-section">
   <div class="box">
-    <h1>Find Your Dream Job Today</h1>
-    <p>Thousands of companies are hiring right now.</p>
-    <form id="searchForm" class="search">
+    <h1>Innovate Your Career.</h1>
+    <p>The tech industry's leading companies are here.</p>
+    <form id="searchForm" class="search-form">
       <input id="q" placeholder="Job Title / Skills" required />
       <input id="loc" placeholder="Location" />
       <button>Search</button>
@@ -37,14 +36,25 @@
 
 <section class="container">
   <div class="grid cols-3">
-    <div class="card"><strong>Students</strong><p>Create profile & apply.</p></div>
-    <div class="card"><strong>Recruiters</strong><p>Post jobs & manage candidates.</p></div>
-    <div class="card"><strong>Secure</strong><p>Powered by Spring Boot + MySQL.</p></div>
+    <div class="card"><strong>For Students</strong><p>Launch your career. Create a powerful profile, apply to top companies, and get a head start in the tech world.</p></div>
+    <div class="card"><strong>For Recruiters</strong><p>Find your next hire. Post jobs in minutes, manage your applicants with ease, and connect with a curated network of technical talent.</p></div>
+    <div class="card"><strong>Secure & Reliable</strong><p>Built on a robust and scalable architecture with Spring Boot and MySQL, ensuring your data is safe and your experience is seamless.</p></div>
+  </div>
+</section>
+
+
+
+<!-- New CTA section -->
+<section class="container cta-section">
+  <div class="card cta-card">
+    <h3>Ready to Elevate Your Career?</h3>
+    <p>Join thousands of professionals who found their dream job on GetHired.</p>
+    <a href="/signup.html" class="primary-button">Register Now</a>
   </div>
 </section>
 
 <footer>© <span id="year"></span> GetHired</footer>
-<script src="/assets/app.js"></script>
+<script src="/app.js"></script>
 <script>document.getElementById('year').textContent=new Date().getFullYear()</script>
 </body>
 </html>
