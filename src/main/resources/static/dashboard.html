@@ -8,13 +8,26 @@
 <nav class="nav"><div class="inner">
   <div class="brand">GET HIRED</div>
   <div class="menu"> 
-     <a href="javascript:void(0)" id="logout">Logout</a>
+     <!-- <a href="javascript:void(0)" id="logout">Logout</a> -->
      <a href="index.html"> home</a>
 
   </div>
 </div></nav>
 
+<button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
 
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="brand">GET HIRED</div>
+  <nav>
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="jobs.html">💼 Jobs</a>
+    <a href="applications.html">📄 My Applications</a>
+    <a href="profile.html">👤 Profile</a>
+    <a href="employers.html">🏢 Employers</a>
+    <a href="index.html">↩ Home</a>
+  </nav>
+</div>
 
 
 <div class="container">
@@ -62,6 +75,12 @@ if(user && appsDiv){
 } else {
   appsDiv.innerHTML = '<p>Please login first</p>';
 }
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
+  }
+
+
 </script>
 
 
