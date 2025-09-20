@@ -193,4 +193,93 @@ footer {
   color: var(--muted);
 }
 
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -220px;  /* hidden on mobile */
+  width: 220px;
+  height: 100vh;
+  background: #f8fafc;   /* light background like your cards */
+  border-right: 1px solid #e2e8f0; /* subtle border like nav */
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+/* Active (open on mobile) */
+.sidebar.active {
+  left: 0;
+}
+
+/* Brand */
+.sidebar .brand {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0f172a; /* same as nav text */
+}
+
+/* Sidebar links */
+.sidebar nav a {
+  display: block;
+  padding: 10px 16px;
+  color: #0f172a;
+  text-decoration: none;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  margin: 2px 8px;
+  transition: background 0.2s;
+}
+
+.sidebar nav a:hover {
+  background: #e2e8f0; /* same hover tone used elsewhere */
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -220px; /* default hidden */
+  width: 220px;
+  height: 100vh;
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  transition: left 0.3s ease;
+  z-index: 1000;   /* toggle button ke niche */
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -220px; /* default hidden */
+  width: 220px;
+  height: 100vh;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  transition: left 0.3s ease;
+  z-index: 1000;   /* toggle button ke niche */
+}
+/* Toggle Button */
+.sidebar-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: white;
+  color: black;
+  border: none;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 2000;   /* sidebar (1000) se upar rakha */
+  border-radius: 6px;
+}
 
