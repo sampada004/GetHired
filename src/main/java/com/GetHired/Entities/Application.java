@@ -1,5 +1,6 @@
 package com.GetHired.Entities;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,10 @@ public class Application {
 
     @Column(name = "employeeid")
     private Long employeeId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "jobid", insertable = false, updatable = false)
+    private Job job;
 
     @Column(name = "jobid")
     private Long jobId;
@@ -41,5 +46,14 @@ public class Application {
         if (this.application_date == null) {
             this.application_date = LocalDate.now();
         }
+    }
+
+    // Getters and setters for Job field
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
     }
 }

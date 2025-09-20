@@ -192,7 +192,6 @@ button.ghost {
   font-weight: 600;
   font-size: 0.85rem;
 }
-
 .cta-section {
   text-align: center;
   margin-top: 60px;
@@ -200,7 +199,6 @@ button.ghost {
 .cta-card {
   padding: 40px;
 }
-
 footer {
   padding: 40px 24px;
   text-align: center;
@@ -208,3 +206,5 @@ footer {
   color: #d1d5db;
   margin-top: 60px;
 }
+
+

@@ -1,14 +1,13 @@
 package com.GetHired.Controller;
 
 import com.GetHired.Entities.Employee;
-
 import com.GetHired.Service.EmployeeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> loginData, HttpSession session) {
         try {
             String email = loginData.get("email");
             String password = loginData.get("password");
@@ -38,6 +37,9 @@ public class EmployeeController {
             Optional<Employee> employee = employeeServices.findByEmail(email);
 
             if (employee.isPresent() && employee.get().getPassword().equals(password)) {
+                // Store email in session
+                session.setAttribute("loggedInEmail", email);
+
                 Map<String, Object> response = Map.of(
                         "employeeId", employee.get().getId(),
                         "name", employee.get().getName(),
@@ -57,5 +59,16 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping("/profile")
+    public Employee getProfile(HttpSession session) {
+        // Get logged-in user's email from session
+        String email = (String) session.getAttribute("loggedInEmail");
 
+        if (email == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
+        Optional<Employee> employeeOpt = employeeServices.findByEmail(email);
+        return employeeOpt.orElseThrow(() -> new RuntimeException("Employee not found"));
+    }
 }

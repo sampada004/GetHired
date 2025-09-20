@@ -31,6 +31,15 @@ public class ApplicationController {
         return new ResponseEntity<>(applications, HttpStatus.OK);
     }
 
+    @GetMapping("/for-employee/{employeeId}")
+    public ResponseEntity<List<Application>> getApplicationsByEmployeeId(@PathVariable("employeeId") Long employeeId) {
+        List<Application> applications = applicationServices.getApplicationsByEmployeeId(employeeId);
+        if (applications.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(applications, HttpStatus.OK);
+    }
+
 
 
 }

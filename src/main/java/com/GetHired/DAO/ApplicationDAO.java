@@ -12,4 +12,5 @@ public interface ApplicationDAO extends CrudRepository<Application, Long> {
     List<Application> findByJobId(Long jobId);
 
 
+    List<Application> findByEmployeeId(Long employeeId);
 }

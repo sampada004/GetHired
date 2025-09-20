@@ -29,9 +29,13 @@ public class ApplicationServices {
         return applications;
     }
 
-
-
-
-
-
+    /**
+     * Retrieves all applications submitted by a specific employee, including job details.
+     * The Job details are automatically fetched due to the @ManyToOne relationship.
+     * @param employeeId The ID of the employee.
+     * @return A list of Application objects for the given employee.
+     */
+    public List<Application> getApplicationsByEmployeeId(Long employeeId) {
+        return applicationDAO.findByEmployeeId(employeeId);
+    }
 }

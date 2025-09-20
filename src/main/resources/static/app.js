@@ -149,3 +149,36 @@ API.getApplicationsByJob = async function(jid){
   return res.json();
 };
 
+// --------- Profile fetching function ----------
+function loadProfile() {
+  const profileDiv = document.getElementById('profileSection');
+  if (!profileDiv) return;
+
+  fetch('/employee/profile', {
+    method: 'GET',
+    credentials: 'include'
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("You are not logged in or session expired.");
+    }
+    return response.json();
+  })
+  .then(employee => {
+    profileDiv.innerHTML = `
+      <div class="profile-card">
+        <h2>${employee.name}</h2>
+        <p><strong>Degree:</strong> ${employee.degree}</p>
+        <p><strong>Passout Year:</strong> ${employee.passoutYear}</p>
+        <p><strong>Skills:</strong> ${employee.skills}</p>
+        <p><strong>Email:</strong> ${employee.email}</p>
+      </div>
+    `;
+  })
+  .catch(error => {
+    profileDiv.innerHTML = `<p style="color:red;">${error.message}</p>`;
+  });
+}
+
+// Call after page loads
+document.addEventListener('DOMContentLoaded', loadProfile);
