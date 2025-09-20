@@ -208,3 +208,52 @@ footer {
 }
 
 
+/* ================= Profile Section Styling ================= */
+.profile-card {
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+.profile-card .card-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--primary-dark);
+}
+
+.profile-field-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--secondary);
+  font-size: 1rem;
+  color: var(--primary-dark);
+}
+
+.profile-field-card:last-child {
+  border-bottom: none;
+}
+
+.profile-field-card .label {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.profile-field-card .value {
+  text-align: right;
+  max-width: 60%;
+  word-break: break-word;
+}
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  .profile-field-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .profile-field-card .value {
+    text-align: left;
+    max-width: 100%;
+  }
+}

@@ -72,6 +72,29 @@ if(loginForm){
   });
 }
 
+//logout
+
+  document.getElementById('logout').addEventListener('click', async function (e) {
+    e.preventDefault();
+
+    try {
+      // Call backend logout
+      await fetch("/logout", {
+        method: "POST",
+        credentials: "include"
+      });
+    } catch (err) {
+      console.error("Backend logout failed:", err);
+    }
+
+    // Clear frontend storage
+    localStorage.removeItem("gh_user");
+
+    // Redirect to login
+    window.location.href = "/login.html";
+  });
+
+
 // ---- Signup page wiring ----
 const signupForm = qs('#signupForm');
 if(signupForm){
@@ -108,6 +131,12 @@ if(signupForm){
   el.innerHTML = `<span class="badge">${u.role}</span> ${u.name || u.email}`;
   qs('#logout')?.addEventListener('click', ()=>{ auth.clear(); location.href='/login.html'; });
 })();
+
+qs('#showProfile')?.addEventListener('click', e=>{
+  e.preventDefault();
+  loadProfile(); // call the function that fetches from /employee/profile
+});
+
 
 
 
@@ -149,36 +178,47 @@ API.getApplicationsByJob = async function(jid){
   return res.json();
 };
 
+
 // --------- Profile fetching function ----------
-function loadProfile() {
-  const profileDiv = document.getElementById('profileSection');
-  if (!profileDiv) return;
 
-  fetch('/employee/profile', {
-    method: 'GET',
-    credentials: 'include'
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("You are not logged in or session expired.");
-    }
-    return response.json();
-  })
-  .then(employee => {
-    profileDiv.innerHTML = `
-      <div class="profile-card">
-        <h2>${employee.name}</h2>
-        <p><strong>Degree:</strong> ${employee.degree}</p>
-        <p><strong>Passout Year:</strong> ${employee.passoutYear}</p>
-        <p><strong>Skills:</strong> ${employee.skills}</p>
-        <p><strong>Email:</strong> ${employee.email}</p>
-      </div>
-    `;
-  })
-  .catch(error => {
-    profileDiv.innerHTML = `<p style="color:red;">${error.message}</p>`;
-  });
-}
 
-// Call after page loads
-document.addEventListener('DOMContentLoaded', loadProfile);
+ function loadProfile() {
+    const profileDiv = document.getElementById('profileSection');
+    if (!profileDiv) return;
+
+    fetch('/employee/profile', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("You are not logged in or session expired.");
+      return response.json();
+    })
+    .then(employee => {
+      profileDiv.innerHTML = `
+        <div class="profile-field-card"><strong>Name:</strong> <span>${employee.name}</span></div>
+        <div class="profile-field-card"><strong>Email:</strong> <span>${employee.email}</span></div>
+        <div class="profile-field-card"><strong>Degree:</strong> <span>${employee.degree}</span></div>
+        <div class="profile-field-card"><strong>Passout Year:</strong> <span>${employee.passout_year}</span></div>
+        <div class="profile-field-card"><strong>Skills:</strong> <span>${employee.skills}</span></div>
+      `;
+    })
+    .catch(error => {
+      profileDiv.innerHTML = `<p style="color:red;">${error.message}</p>`;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', loadProfile);
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Applications</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <!-- Load global app.js (defines `auth` and `API`) -->
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+  <div class="inner">
+    <div class="brand">GET HIRED</div>
+      
+    <div class="menu">
+        <a href="/dashboard.html">Dashboard</a>
+     
+      <div class="menu">
+        <!-- <a href="javascript:void(0)" id="logout">Logout</a> -->
+      
+  </div>
+</nav>
+  </header>
+
+  <main class="container">
+    <h1>My Applications</h1>
+  <div class="container"></div>
+    <!-- Outer card for the list -->
+    <div class="card">
+      <div id="applicationsList" class="applications-list">
+        Loading applications...
+      </div>
+    </div>
+      
+  </main>
+
+  <!-- Inline script — uses global `auth` and `API` from app.js -->
+  <script>
+    // Small helpers (safe-escape)
+    function escapeHtml(text) {
+      if (text == null) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+     document.addEventListener("DOMContentLoaded", async () => {
+    const user = auth.get(); // from app.js
+    if (!user) {
+      window.location.href = "/login.html";
+      return;
+    }
+
+    try {
+      const apps = await API.getApplicationsByEmployee(user.id);
+      const list = document.getElementById("applicationsList");
+
+      if (!apps || apps.length === 0) {
+        list.innerHTML = "<p>No applications found.</p>";
+        return;
+      }
+
+      list.innerHTML = apps.map(app => `
+        <div class="card" style="margin: 15px 0; padding: 16px;">
+          <h3>${app.job && app.job.title ? app.job.title : "Untitled Job"}</h3>
+          <p><strong>Company:</strong> ${app.job && app.job.company ? app.job.company.name : "N/A"}</p>
+          <p><strong>Status:</strong> ${app.status || "Pending"}</p>
+          <p><strong>Applied On:</strong> ${app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : "N/A"}</p>
+        </div>
+      `).join("");
+    } catch (err) {
+      console.error(err);
+      document.getElementById("applicationsList").innerHTML =
+        "<p style='color:red;'>Error loading applications.</p>";
+    }
+  });
+
+  // logout button
+  document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    auth.clear();
+    window.location.href = "/login.html";
+  });
+  </script>
+</body>
+</html>

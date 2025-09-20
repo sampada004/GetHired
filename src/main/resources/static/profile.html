@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profile</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <!-- ensure app.js is loaded so loadProfile() runs -->
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    
+
+    <nav class="nav">
+  <div class="inner">
+    <div class="brand">GET HIRED</div>
+      
+    <div class="menu">
+        <a href="/dashboard.html">Dashboard</a>
+     
+      <div class="menu">
+        <!-- <a href="javascript:void(0)" id="logout">Logout</a> -->
+      
+  </div>
+</nav>
+  </header>
+
+  <main class="container">
+    <h1>My Profile</h1>
+    <!-- THIS is the container loadProfile() fills -->
+    <div id="profileSection" class="card profile-card" aria-live="polite"></div>
+   
+  </main>
+</body>
+</html>

@@ -205,7 +205,11 @@
   <div class="inner">
     <input type="text" placeholder="Search jobs or applications..." id="searchBox">
     <div class="menu">
-      <a href="javascript:void(0)" id="logout">Logout</a>
+      <!-- <a href="javascript:void(0)" id="logout">Logout -->
+      <a href="#" id="logout">Logout</a>
+
+      
+      <a href="/" id="logout">Home</a>
     </div>
   </div>
 </nav>
@@ -214,9 +218,12 @@
 <div class="sidebar" id="sidebar">
   <div class="brand">Dashboard</div>
   <nav>
-    <a href="profile.html">Profile</a>
-    <a href="applications.html">My Applications</a>
-    <a href="jobs.html">Jobs</a>
+   <a href="/profile.html">Profile</a>
+
+
+<a href="/Application.html">My Applications</a>
+
+    <a href="/jobs.html">Jobs</a>
   </nav>
 </div>
 
@@ -227,7 +234,7 @@
   </div>
 
   <!-- Profile Section -->
-  <div id="profileSection"></div>
+  <!-- <div id="profileSection"></div> -->
 
   <div class="container">
     <!-- Existing application cards will appear here -->
@@ -263,7 +270,30 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', loadProfile);
+  
+
+  
+  document.getElementById('logout').addEventListener('click', async function (e) {
+    e.preventDefault();
+
+    try {
+      // Call backend logout
+      await fetch("/logout", {
+        method: "POST",
+        credentials: "include"
+      });
+    } catch (err) {
+      console.error("Backend logout failed:", err);
+    }
+
+    // Clear frontend storage
+    localStorage.removeItem("gh_user");
+
+    // Redirect to login
+    window.location.href = "/login.html";
+  });
+
+
 </script>
 
 </body>
