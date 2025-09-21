@@ -46,6 +46,38 @@ const API = {
   },
   async recruiterLogin(payload){
     return fetch('/recruiter/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+  },
+  async getJobs(){
+    return fetch('/job/all');
+  },
+  async addJob(payload){
+    return fetch('/job/post', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+  },
+  async getJobsByRecruiter(rid){
+    return fetch(`/jobs/recruiter/${rid}`);
+  },
+  async applyJob(payload){
+    return fetch('/application/add', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+  },
+  async getApplicationsByEmployee(eid){
+    return fetch(`/application/employee/${eid}`);
+  },
+  async getApplicationsByJob(jid){
+    return fetch(`/application/job/${jid}`);
+  },
+  async loadProfile() {
+    return fetch('/employee/profile', {
+      method: 'GET',
+      credentials: 'include'
+    });
   }
 };
 
@@ -73,26 +105,25 @@ if(loginForm){
 }
 
 //logout
+document.getElementById('logout')?.addEventListener('click', async function (e) {
+  e.preventDefault();
 
-  document.getElementById('logout').addEventListener('click', async function (e) {
-    e.preventDefault();
+  try {
+    // Call backend logout
+    await fetch("/logout", {
+      method: "POST",
+      credentials: "include"
+    });
+  } catch (err) {
+    console.error("Backend logout failed:", err);
+  }
 
-    try {
-      // Call backend logout
-      await fetch("/logout", {
-        method: "POST",
-        credentials: "include"
-      });
-    } catch (err) {
-      console.error("Backend logout failed:", err);
-    }
+  // Clear frontend storage
+  localStorage.removeItem("gh_user");
 
-    // Clear frontend storage
-    localStorage.removeItem("gh_user");
-
-    // Redirect to login
-    window.location.href = "/login.html";
-  });
+  // Redirect to login
+  window.location.href = "/login.html";
+});
 
 
 // ---- Signup page wiring ----
@@ -131,94 +162,3 @@ if(signupForm){
   el.innerHTML = `<span class="badge">${u.role}</span> ${u.name || u.email}`;
   qs('#logout')?.addEventListener('click', ()=>{ auth.clear(); location.href='/login.html'; });
 })();
-
-qs('#showProfile')?.addEventListener('click', e=>{
-  e.preventDefault();
-  loadProfile(); // call the function that fetches from /employee/profile
-});
-
-
-
-
-// ----- JOB APIs -----
-API.getJobs = async function(){
-  const res = await fetch('/job/all');
-  return res.json();
-};
-
-API.addJob = async function(payload){
-  return fetch('/job/post', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(payload)
-  });
-};
-
-API.getJobsByRecruiter = async function(rid){
-  const res = await fetch(`/jobs/recruiter/${rid}`);
-  return res.json();
-};
-
-// ----- APPLICATION APIs -----
-API.applyJob = async function(payload){
-  return fetch('/application/add', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(payload)
-  });
-};
-
-API.getApplicationsByEmployee = async function(eid){
-  const res = await fetch(`/application/employee/${eid}`);
-  return res.json();
-};
-
-API.getApplicationsByJob = async function(jid){
-  const res = await fetch(`/application/job/${jid}`);
-  return res.json();
-};
-
-
-// --------- Profile fetching function ----------
-
-
- function loadProfile() {
-    const profileDiv = document.getElementById('profileSection');
-    if (!profileDiv) return;
-
-    fetch('/employee/profile', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then(response => {
-      if (!response.ok) throw new Error("You are not logged in or session expired.");
-      return response.json();
-    })
-    .then(employee => {
-      profileDiv.innerHTML = `
-        <div class="profile-field-card"><strong>Name:</strong> <span>${employee.name}</span></div>
-        <div class="profile-field-card"><strong>Email:</strong> <span>${employee.email}</span></div>
-        <div class="profile-field-card"><strong>Degree:</strong> <span>${employee.degree}</span></div>
-        <div class="profile-field-card"><strong>Passout Year:</strong> <span>${employee.passout_year}</span></div>
-        <div class="profile-field-card"><strong>Skills:</strong> <span>${employee.skills}</span></div>
-      `;
-    })
-    .catch(error => {
-      profileDiv.innerHTML = `<p style="color:red;">${error.message}</p>`;
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', loadProfile);
-
-
-
-
-
-
-
-
-
-
-
-
-
