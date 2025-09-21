@@ -99,7 +99,7 @@
     /* Profile Section Styling */
     #profileSection {
       width: 100%;
-      padding: 20px; /* Reduced vertical padding */
+      padding: 20px;
       font-size: 1.3rem;
       color: var(--primary-dark);
       line-height: 2rem;
@@ -113,13 +113,13 @@
         background: var(--card);
         border-radius: 12px;
         box-shadow: 0 4px 12px var(--shadow);
-        padding: 10px 20px; /* Reduced padding */
+        padding: 10px 20px;
         display: flex;
-        justify-content: flex-start; /* Aligns to the left */
+        justify-content: flex-start;
         align-items: center;
         margin-bottom: 12px;
         transition: transform 0.2s;
-        gap: 20px; /* Added a consistent gap between label and value */
+        gap: 20px;
     }
 
     .profile-field-card:hover {
@@ -130,12 +130,12 @@
     .profile-field-card strong {
         color: var(--primary-dark);
         font-weight: 600;
-        min-width: 120px; /* Adjusted min-width for better spacing */
+        min-width: 120px;
     }
 
     .profile-field-card span {
         flex: 1;
-        text-align: left; /* Aligned value to the left */
+        text-align: left;
         color: var(--accent);
         font-weight: 500;
     }
@@ -205,11 +205,8 @@
   <div class="inner">
     <input type="text" placeholder="Search jobs or applications..." id="searchBox">
     <div class="menu">
-      <!-- <a href="javascript:void(0)" id="logout">Logout -->
       <a href="#" id="logout">Logout</a>
-
-      
-      <a href="/" id="logout">Home</a>
+      <a href="/" id="home">Home</a>
     </div>
   </div>
 </nav>
@@ -218,11 +215,8 @@
 <div class="sidebar" id="sidebar">
   <div class="brand">Dashboard</div>
   <nav>
-   <a href="/profile.html">Profile</a>
-
-
-<a href="/Application.html">My Applications</a>
-
+    <a href="/profile.html">Profile</a>
+    <a href="/Application.html">My Applications</a>
     <a href="/jobs.html">Jobs</a>
   </nav>
 </div>
@@ -234,7 +228,7 @@
   </div>
 
   <!-- Profile Section -->
-  <!-- <div id="profileSection"></div> -->
+  <div id="profileSection"></div>
 
   <div class="container">
     <!-- Existing application cards will appear here -->
@@ -270,29 +264,8 @@
     });
   }
 
-  
-
-  
-  document.getElementById('logout').addEventListener('click', async function (e) {
-    e.preventDefault();
-
-    try {
-      // Call backend logout
-      await fetch("/logout", {
-        method: "POST",
-        credentials: "include"
-      });
-    } catch (err) {
-      console.error("Backend logout failed:", err);
-    }
-
-    // Clear frontend storage
-    localStorage.removeItem("gh_user");
-
-    // Redirect to login
-    window.location.href = "/login.html";
-  });
-
+  // This is the new event listener that will trigger on page load
+  document.addEventListener('DOMContentLoaded', loadProfile);
 
 </script>
 
