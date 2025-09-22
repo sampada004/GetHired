@@ -4,98 +4,330 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Jobs — GetHired</title>
-  <link rel="stylesheet" href="/styles.css"/>
+  <style>
+    :root {
+      --primary-light: #F8F9FA;
+      --primary-dark: #212529;
+      --accent: #007BFF;
+      --secondary: #DEE2E6;
+      --card: #FFFFFF;
+      --shadow: rgba(0,0,0,0.08);
+      --danger: #dc3545;
+      --navy: #001f4d;
+      --navy-hover: #003080;
+      --success: #28a745;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 100vh;
+      background: var(--card);
+      border-right: 1px solid var(--secondary);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+      z-index: 1000;
+      box-shadow: 2px 0 10px var(--shadow);
+    }
+
+    .has-sidebar {
+      background: #E9ECEF;
+      margin-left: 220px;
+    }
+
+    .sidebar .brand {
+      font-size: 1.8rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--primary-dark);
+    }
+
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 12px;
+    }
+    .sidebar nav a {
+      display: block;
+      padding: 12px 16px;
+      background: var(--navy);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.3rem;
+      font-weight: 800;
+      border-radius: 8px;
+      text-align: center;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .sidebar nav a:hover {
+      background: var(--navy-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Dashboard Content */
+    .dashboard-content {
+      padding: 20px;
+      padding-top: 90px;
+    }
+
+    /* Top Bar */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 220px;
+      z-index: 1001;
+      background: var(--card);
+      box-shadow: 0 2px 10px var(--shadow);
+      width: calc(100% - 220px);
+    }
+    .nav .inner {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 95%;
+      gap: 20px;
+    }
+
+    .menu {
+      display: flex;
+      gap: 16px;
+    }
+    .menu a#logout {
+      background: var(--danger);
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: 600;
+      opacity: 1;
+      text-decoration: none;
+    }
+    .menu a#logout:hover {
+      background: #b02a37;
+    }
+
+    /* Job Listings */
+    .container {
+      width: min(1100px, 92vw);
+      margin: 40px auto;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: var(--navy);
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--secondary);
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .search-bar button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .search-bar button:hover {
+      background: #0056b3;
+    }
+
+    /* Job Card */
+    .job-card {
+      background: var(--card);
+      border: 1px solid var(--secondary);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px var(--shadow);
+      transition: transform 0.2s;
+    }
+    .job-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .job-details {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .job-details tr {
+      border-bottom: 1px solid var(--secondary);
+    }
+    .job-details td {
+      padding: 10px 6px;
+      vertical-align: top;
+    }
+    .job-details td.label {
+      font-weight: 600;
+      color: var(--navy);
+      width: 150px;
+    }
+    .job-details td.value {
+      color: #333;
+    }
+    .job-status {
+      font-weight: 700;
+    }
+    .available {
+      color: var(--success);
+    }
+    .not-available {
+      color: var(--danger);
+    }
+
+    .apply-btn {
+      margin-top: 15px;
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .apply-btn:hover {
+      background: #0056b3;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
-<body>
+<body class="has-sidebar">
+
 <nav class="nav">
   <div class="inner">
-    <div class="brand">GET HIRED</div>
     <div class="menu">
-      <!-- <a href="/">Home</a> -->
-      <div class="menu">
-        <!-- <a href="javascript:void(0)" id="logout">Logout</a> -->
-          <a href="/dashboard.html">  Dashboard</a>
-      </div>
-      <a href="employers.html">Post a job</a>
+      <a href="javascript:void(0)" id="logout">Logout</a>
     </div>
   </div>
 </nav>
 
-<div class="container">
-  <h2>Open Roles</h2>
-  <!-- The ID is changed to jobsContainer to match the JavaScript -->
-  <div class="grid cols-2" id="jobsContainer">
-    <!-- The static cards will be replaced by the fetched jobs -->
-    <div class="card">
-      <strong>Java Intern</strong> • Acme Corp — Indore
-      <p style="margin:.4rem 0;color:#475569">Work with Java/Spring team on backend features.</p>
-      <button class="primary" onclick="alert('Please define the API.applyJob function to enable this.')">Apply</button>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="brand">Dashboard</div>
+  <nav>
+    <a href="dashboard.html">Profile</a>
+    <a href="Application.html">My Applications</a>
+    <a href="jobs.html" class="active">Jobs</a>
+  </nav>
+</div>
+
+<div class="dashboard-content">
+  <div class="container">
+    <h2>Available Jobs</h2>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search jobs by title, company, or location..."/>
+      <button onclick="searchJobs()">Search</button>
+    </div>
+
+    <div id="jobs-list" style="display: grid; gap: 20px;">
+      <!-- Job cards will load here -->
     </div>
   </div>
 </div>
 
 <script src="/app.js"></script>
 <script>
-  // This function will fetch jobs and display them on the page.
-  async function fetchAndDisplayJobs() {
-      // Find the correct container for the jobs.
-      const jobsContainer = document.querySelector('#jobsContainer');
+  const jobsList = document.getElementById('jobs-list');
+  let jobs = [];
 
-      if (!jobsContainer) {
-          console.error("Jobs container element not found!");
-          return;
-      }
-
-      try {
-          // Fetch all jobs using the API.getJobs function from app.js
-          const jobs = await API.getJobs();
-
-          if (jobs.length === 0) {
-              jobsContainer.innerHTML = '<p>No open roles are available at the moment.</p>';
-              return;
-          }
-
-          // Generate HTML for each job and insert it into the container.
-          jobsContainer.innerHTML = jobs.map(j =>
-              `<div class="card">
-                 <strong>${j.title}</strong> • ${j.company} — ${j.location}
-                 <p style="margin:.4rem 0;color:#475569">${j.description}</p>
-                 <button class="primary" onclick="applyForJob(${j.id})">Apply</button>
-               </div>`
-          ).join('');
-
-      } catch (error) {
-          console.error('Error fetching jobs:', error);
-          jobsContainer.innerHTML = '<p>Failed to load jobs. Please check your network and API endpoint.</p>';
-      }
+  async function loadJobs() {
+    jobsList.innerHTML = '<p>Loading jobs...</p>';
+    try {
+      const res = await API.getJobs();
+      jobs = await res.json();
+      displayJobs(jobs);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+      jobsList.innerHTML = `<p style="color:red;">Failed to load jobs.</p>`;
+    }
   }
 
-  // This function handles the job application process.
+  function displayJobs(jobsArray) {
+    if (jobsArray.length === 0) {
+      jobsList.innerHTML = '<p>No jobs found.</p>';
+      return;
+    }
+
+    jobsList.innerHTML = jobsArray.map(job => `
+      <div class="job-card">
+        <table class="job-details">
+          <tr><td class="label">Title</td><td class="value">${job.title}</td></tr>
+          <tr><td class="label">Company</td><td class="value">${job.company || 'N/A'}</td></tr>
+          <tr><td class="label">Location</td><td class="value">${job.location}</td></tr>
+          <tr><td class="label">Skills</td><td class="value">${job.required_skills || '—'}</td></tr>
+          <tr><td class="label">Salary</td><td class="value">${job.salary}</td></tr>
+          <tr><td class="label">Status</td>
+              <td class="value job-status ${job.availableCopies === 0 ? 'not-available' : 'available'}">
+                ${job.availableCopies === 0 ? 'Not Available' : 'Available'}
+              </td>
+          </tr>
+        </table>
+        <button class="apply-btn" onclick="applyForJob(${job.id})">Apply</button>
+        <div id="msg-${job.id}" class="message"></div>
+      </div>
+    `).join('');
+  }
+
   async function applyForJob(jobId) {
     const user = auth.get();
-    if (!user) {
-        alert('Please login first');
-        return;
+    if (!user || !user.id) {
+      alert("Please log in to apply for jobs.");
+      return;
     }
 
-    const payload = { employeeId: user.id, jobId: jobId };
-
     try {
-        // Use the API.applyJob function from app.js to send the application.
-        const res = await API.applyJob(payload);
-        if (res.ok) {
-            alert('Application sent successfully!');
-        } else {
-            alert('Failed to send application. Please try again.');
-        }
+      const res = await API.applyJob({ employeeId: user.id, jobId });
+      if (res.ok) {
+        document.getElementById(`msg-${jobId}`).innerHTML = "<span style='color:green;'>Application submitted!</span>";
+      } else {
+        document.getElementById(`msg-${jobId}`).innerHTML = "<span style='color:red;'>Failed to apply. Try again.</span>";
+      }
     } catch (error) {
-        console.error('Error applying for job:', error);
-        alert('An error occurred while applying. Please try again later.');
+      console.error('Error applying for job:', error);
+      document.getElementById(`msg-${jobId}`).innerHTML = "<span style='color:red;'>Error occurred. Try later.</span>";
     }
   }
 
-  // Call the function when the page loads to display the jobs.
-  fetchAndDisplayJobs();
+  function searchJobs() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = jobs.filter(job =>
+      job.title.toLowerCase().includes(query) ||
+      (job.company && job.company.toLowerCase().includes(query)) ||
+      job.location.toLowerCase().includes(query)
+    );
+    displayJobs(filtered);
+  }
+
+  document.addEventListener('DOMContentLoaded', loadJobs);
+
+  document.getElementById('logout').addEventListener('click', () => {
+    auth.clear();
+  });
 </script>
 </body>
 </html>

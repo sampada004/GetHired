@@ -17,6 +17,7 @@ public class Job {
     private String description;
     private String location;
     private String salary;
+    private String company;
 
     private LocalDate apply_before;
 
@@ -117,6 +118,14 @@ public class Job {
 
     public void setRequired_skills(String required_skills) {
         this.required_skills = required_skills;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override
