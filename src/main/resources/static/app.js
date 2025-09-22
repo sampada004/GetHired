@@ -77,7 +77,9 @@ if(loginForm){
       const user = { role: role.toUpperCase(), email, name: data.name || '', id: data.employeeId || null };
       auth.set(user);
       alert('Welcome ' + (user.name || user.email));
-      location.href = '/dashboard.html';
+      // location.href = '/dashboard.html';
+      location.href = role === 'employee' ? '/dashboard.html' : '/recruiter-dashboard.html';
+
     } else {
       alert('Invalid credentials');
     }

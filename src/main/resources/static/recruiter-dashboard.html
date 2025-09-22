@@ -1,10 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Dashboard — GetHired</title>
-  <style>
+  <meta charset="UTF-8">
+  <title>Recruiter Dashboard</title>
+  <!-- <link rel="stylesheet" href=/dashboard.css"> -->
+
+
+   <style>
     :root {
       --primary-light: #F8F9FA;
       --primary-dark: #212529;
@@ -198,8 +200,16 @@
       background: #b02a37;
     }
   </style>
+
 </head>
+
+
+
+
+
+  
 <body class="has-sidebar">
+
 
 <nav class="nav">
   <div class="inner">
@@ -211,63 +221,86 @@
   </div>
 </nav>
 
-<!-- Sidebar -->
-<div class="sidebar" id="sidebar">
+
+ <div class="sidebar" id="sidebar">
   <div class="brand">Dashboard</div>
   <nav>
-    <!-- <a href="/profile.html">Profile</a> -->
-    <a href="/Application.html">My Applications</a>
-    <a href="/jobs.html">Jobs</a>
-  </nav>
-</div>
+       
+       <a href="employers.html">Post New Job</a>
+       <a href="/jobs.html">All Jobs</a>
+        <!-- <a href="jobs.html">My Posted Jobs</a> -->
+    <nav>
+    </div>
 
-<div class="dashboard-content">
+      <div class="dashboard-content">
   <div class="welcome-message">
-    <h1>Welcome.</h1>
-    <p>Your journey to a better career continues here. Let's find your next opportunity.</p>
-  </div>
-
-  <!-- Profile Section -->
-  <div id="profileSection"></div>
-
-  <div class="container">
-    <!-- Existing application cards will appear here -->
-  </div>
+  
+      <h1>Welcome, <span id="recruiterName">Recruiter</span></h1>
+      <p>You can manage jobs and view applications here.</p>
 </div>
+<div id="recruiterName"></div>
+      <div class="grid cols-2" id="myJobsContainer">
+        <!-- Jobs will be loaded here -->
+      </div>
 
+
+  </div>
 <script src="/app.js"></script>
-<script>
-  // --------- Profile Fetching ----------
-  function loadProfile() {
-    const profileDiv = document.getElementById('profileSection');
-    if (!profileDiv) return;
+  <script>
+  
 
-    fetch('/employee/profile', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then(response => {
-      if (!response.ok) throw new Error("You are not logged in or session expired.");
-      return response.json();
-    })
-    .then(employee => {
-      profileDiv.innerHTML = `
-        <div class="profile-field-card"><strong>Name:</strong> <span>${employee.name}</span></div>
-        <div class="profile-field-card"><strong>Email:</strong> <span>${employee.email}</span></div>
-        <div class="profile-field-card"><strong>Degree:</strong> <span>${employee.degree}</span></div>
-        <div class="profile-field-card"><strong>Passout Year:</strong> <span>${employee.passout_year}</span></div>
-        <div class="profile-field-card"><strong>Skills:</strong> <span>${employee.skills}</span></div>
-      `;
-    })
-    .catch(error => {
-      profileDiv.innerHTML = `<p style="color:red;">${error.message}</p>`;
+ 
+
+    // Load Recruiter Info from LocalStorage
+    const user = JSON.parse(localStorage.getItem("gh_user"));
+    if (!user || user.role !== "RECRUITER") {
+      window.location.href = "/login.html";
+    } else {
+      document.getElementById("recruiterName").textContent = user.name || user.email;
+    }
+
+    // Fetch jobs posted by this recruiter
+    async function loadMyJobs() {
+      try {
+        const res = await fetch(`/jobs/recruiter/${user.id}`);
+        const jobs = await res.json();
+        const container = document.getElementById("myJobsContainer");
+
+        if (!jobs.length) {
+          container.innerHTML = "<p>No jobs posted yet.</p>";
+          return;
+        }
+
+        container.innerHTML = jobs.map(job => `
+          <div class="card">
+            <h3>${job.title}</h3>
+            <p><strong>Location:</strong> ${job.location}</p>
+            <p><strong>Skills:</strong> ${job.requiredSkills}</p>
+            <p><strong>Salary:</strong> ₹${job.salary}</p>
+            <p><strong>Apply Before:</strong> ${job.applyBefore}</p>
+            <p><strong>Description:</strong> ${job.description}</p>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error("Error loading recruiter jobs", err);
+        document.getElementById("myJobsContainer").innerHTML = "<p style='color:red;'>Failed to load jobs.</p>";
+      }
+    }
+
+    
+
+    loadMyJobs();
+
+    // Logout Button
+    document.getElementById('logout').addEventListener('click', async function (e) {
+      e.preventDefault();
+      try {
+        await fetch("/logout", { method: "POST", credentials: "include" });
+      } catch (err) {}
+      localStorage.removeItem("gh_user");
+      window.location.href = "/login.html";
     });
-  }
-
-  // This is the new event listener that will trigger on page load
-  document.addEventListener('DOMContentLoaded', loadProfile);
-
-</script>
+  </script>
 
 </body>
 </html>
