@@ -1,11 +1,12 @@
 :root {
-  --primary-light: #F8F9FA;
-  --primary-dark: #212529;
-  --accent: #007BFF;
-  --secondary: #DEE2E6;
-  --card: #FFFFFF;
-  --shadow: rgba(0,0,0,0.08);
+  --primary-light: #a6daf2;   /* White background */
+  --primary-dark: black;    /* Blue text */
+  --accent: 	#000080;          /* Blue accent */
+  --secondary: #FFFFFF;       /* White borders and inputs */
+  --card: #FFFFFF;            /* White cards */
+  --shadow: rgba(0,0,255,0.15); /* Subtle blue shadow */
 }
+
 
 * { box-sizing: border-box; }
 body {
