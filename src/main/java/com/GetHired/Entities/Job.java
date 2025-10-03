@@ -1,59 +1,71 @@
 package com.GetHired.Entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="job")
+@Table(name = "job")
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
 
     @Lob
     private String description;
+
     private String location;
+
     private String salary;
+
     private String company;
 
-    private LocalDate apply_before;
+    @Column(name = "apply_before")
+    private LocalDate applyBefore;
 
-    @Column(name = "recruiter_id")
-    private Long recruiter_id;
+    @ManyToOne
+    @JoinColumn(name = "recruiter_id", referencedColumnName = "id", nullable = true) // foreign key
+    private Recruiter recruiter;
 
-    private LocalDateTime posted_date;
+    @Column(name = "posted_date")
+    private LocalDateTime postedDate;
 
     @PrePersist
     public void setPostedDate() {
-        this.posted_date = LocalDateTime.now();
+        this.postedDate = LocalDateTime.now();
     }
 
-    private String required_skills;
+    @Column(name = "required_skills") // 👈 corrected column name
+    private String requiredSkills;
 
-    public Job() {
-    }
+    public Job() {}
 
-    public Job(LocalDate apply_before, String description, Long id, String location, LocalDateTime posted_date, Long recruiter_id, String required_skills, String salary, String title) {
-        this.apply_before = apply_before;
+    // constructor without recruiter for now
+    public Job(LocalDate applyBefore, String description, Long id, String location,
+               LocalDateTime postedDate, Recruiter recruiter, String requiredSkills,
+               String salary, String title, String company) {
+        this.applyBefore = applyBefore;
         this.description = description;
         this.id = id;
         this.location = location;
-        this.posted_date = posted_date;
-        this.recruiter_id = recruiter_id;
-        this.required_skills = required_skills;
+        this.postedDate = postedDate;
+        this.recruiter = recruiter;
+        this.requiredSkills = requiredSkills;
         this.salary = salary;
         this.title = title;
+        this.company = company;
     }
 
-    public LocalDate getApply_before() {
-        return apply_before;
+    // Getters & Setters
+
+    public LocalDate getApplyBefore() {
+        return applyBefore;
     }
 
-    public void setApply_before(LocalDate apply_before) {
-        this.apply_before = apply_before;
+    public void setApplyBefore(LocalDate applyBefore) {
+        this.applyBefore = applyBefore;
     }
 
     public String getDescription() {
@@ -80,20 +92,20 @@ public class Job {
         this.location = location;
     }
 
-    public LocalDateTime getPosted_date() {
-        return posted_date;
+    public LocalDateTime getPostedDate() {
+        return postedDate;
     }
 
-    public void setPosted_date(LocalDateTime posted_date) {
-        this.posted_date = posted_date;
+    public void setPostedDate(LocalDateTime postedDate) {
+        this.postedDate = postedDate;
     }
 
-    public Long getRecruiter_id() {
-        return recruiter_id;
+    public Recruiter getRecruiter() {
+        return recruiter;
     }
 
-    public void setRecruiter_id(Long recruiter_id) {
-        this.recruiter_id = recruiter_id;
+    public void setRecruiter(Recruiter recruiter) {
+        this.recruiter = recruiter;
     }
 
     public String getSalary() {
@@ -112,12 +124,12 @@ public class Job {
         this.title = title;
     }
 
-    public String getRequired_skills() {
-        return required_skills;
+    public String getRequiredSkills() {
+        return requiredSkills;
     }
 
-    public void setRequired_skills(String required_skills) {
-        this.required_skills = required_skills;
+    public void setRequiredSkills(String requiredSkills) {
+        this.requiredSkills = requiredSkills;
     }
 
     public String getCompany() {
@@ -131,14 +143,16 @@ public class Job {
     @Override
     public String toString() {
         return "Job{" +
-                "apply_before=" + apply_before +
-                ", id=" + id +
+                "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
                 ", salary='" + salary + '\'' +
-                ", recruiter_id=" + recruiter_id +
-                ", posted_date=" + posted_date +
+                ", company='" + company + '\'' +
+                ", applyBefore=" + applyBefore +
+                ", recruiter=" + (recruiter != null ? recruiter.getId() : null) +
+                ", postedDate=" + postedDate +
+                ", requiredSkills='" + requiredSkills + '\'' +
                 '}';
     }
 }

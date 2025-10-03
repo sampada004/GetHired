@@ -279,7 +279,7 @@
           <tr><td class="label">Title</td><td class="value">${job.title}</td></tr>
           <tr><td class="label">Company</td><td class="value">${job.company || 'N/A'}</td></tr>
           <tr><td class="label">Location</td><td class="value">${job.location}</td></tr>
-          <tr><td class="label">Skills</td><td class="value">${job.required_skills || '—'}</td></tr>
+          <tr><td class="label">Skills</td><td class="value">${job.required_skill || '—'}</td></tr>
           <tr><td class="label">Salary</td><td class="value">${job.salary}</td></tr>
           <tr><td class="label">Status</td>
               <td class="value job-status ${job.availableCopies === 0 ? 'not-available' : 'available'}">
