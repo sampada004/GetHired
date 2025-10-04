@@ -120,7 +120,7 @@ body {
 .card {
   background: var(--card);
   border-radius: 12px;
-  box-shadow: 0 4px 12px var(--shadow);
+  box-shadow: 0 4px 12px ;
   padding: 24px;
   transition: 0.3s;
 }
@@ -143,7 +143,7 @@ body {
 form .field { display:flex; flex-direction:column; gap:6px; margin:10px 0; }
 input, select, textarea {
   padding: 12px;
-  border: 1px solid var(--secondary);
+  border: 1px solid;
   border-radius: 8px;
   background: var(--card);
   font-size: 1rem;

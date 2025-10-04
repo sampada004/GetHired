@@ -85,3 +85,49 @@ if(loginForm){
     }
   });
 }
+
+
+
+
+// Signup Form Wiring
+const signupForm = qs('#signupForm');
+if(signupForm){
+  signupForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+
+    const role = qs('input[name=role]:checked')?.value;
+    const name = qs('#name')?.value?.trim();
+    const email = qs('#email')?.value?.trim();
+    const password = qs('#password')?.value?.trim();
+
+    const payload = { name, email, password };
+
+    if(role === 'employee'){
+      payload.degree = qs('#degree')?.value?.trim();
+      payload.passout_year = parseInt(qs('#passout_year')?.value || '0', 10);
+      payload.skills = qs('#skills')?.value?.trim();
+
+      const res = await API.employeeSignup(payload);
+      if(res.ok){
+        alert('Employee registered successfully!');
+        location.href = '/login.html';
+      } else {
+        alert('Employee registration failed.');
+      }
+
+    } else if(role === 'recruiter'){
+      payload.company = qs('#company')?.value?.trim();
+      payload.company_email = qs('#company_email')?.value?.trim();
+
+      const res = await API.recruiterSignup(payload);
+      if(res.ok){
+        alert('Recruiter registered successfully!');
+        location.href = '/login.html';
+      } else {
+        alert('Recruiter registration failed.');
+      }
+    } else {
+      alert("Please select a role.");
+    }
+  });
+}
